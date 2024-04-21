@@ -1,0 +1,1 @@
+# CommShield: Around 600,000 people go missing every year in the USA. Our project helps people to file a missing person complaint which then our website sends it out to all the people living in the same locality.

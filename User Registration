@@ -1,0 +1,38 @@
+import { fetch } from 'wix-fetch';
+export function button14_click(event) {
+	
+	const name = $w('#input1').value + " " + $w('#input62').value
+	const address = $w('#input65').value + " " + $w('#input67').value + " " + $w('#input68').value
+	const number = $w('#input64').value
+	const email = $w('#input63').value
+	const zip_code = $w('#input69').value
+
+	
+	const sendInfo = async () => {
+		fetch('http://127.0.0.1:8000/',{
+			'method':"POST",
+			"headers": {
+      			"Content-Type": "application/json"
+			},
+			"body":JSON.stringify({
+				"id":5,
+				"user":name,
+				"email_address":email,
+				"address": address,
+				"phone_number":number,
+				"zip_code": zip_code,
+			})
+		})
+		$w('#input1').value = ''
+		$w('#input65').value = ''
+		$w('#input67').value = ''
+		$w('#input68').value = ''
+		$w('#input62').value = ''
+		$w('#input64').value = ''
+		$w('#input63').value = ''
+		$w('#input69').value = ''
+	}
+
+
+	sendInfo()
+}

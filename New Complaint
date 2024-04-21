@@ -1,0 +1,72 @@
+import { fetch } from 'wix-fetch';
+import { sendSms } from 'backend/twilio'
+
+
+
+export function button14_click_1(event) {
+
+	
+	const zip_code = $w('#input56').value
+	
+	const name_guardian = $w('#input50').value
+	const number = $w('#input51').value
+	const zip_code_guardian = $w('#input52').value
+
+	const name = $w('#input53').value
+	const sex = $w('#input58').value
+	const age = $w('#input57').value
+	const height = $w('#input59').value
+	const last_seen_address = $w('#input54').value
+	const last_seen_zip_code = $w('#input56').value
+	const desc = $w('#input55').value
+
+	const messageSend = `Missing Person's Name: ${name}, \n Missing Person's Sex: ${sex}, \n Missing Person's Age: ${age},\n Missing Person's Height: ${height},\n Missing Person's Last Seen: ${last_seen_address} \n Emergency Event : ${desc}'`
+
+	const getAPI = async () => {
+		
+		fetch('http://127.0.0.1:8000/',{
+			'method':"POST",
+			"headers": {
+      			"Content-Type": "application/json"
+			},
+			"body":JSON.stringify({
+				"id":5,
+				"user":name_guardian,
+				"email_address":"null@gmail.com",
+				"address": "null",
+				"phone_number":number,
+				"zip_code": zip_code_guardian,
+			})
+		})
+		
+		fetch(`http://127.0.0.1:8000/location/${zip_code}/`,{
+			'method':"GET",
+			"headers": {
+      			"Content-Type": "application/x-www-form-urlencoded"
+			},
+		}).then((response)=>response.json()).then(bodyJSON => {
+			bodyJSON.map(obj => {
+				let receiver_name = obj.user 
+				sendSms(obj.phone_number,receiver_name,name_guardian,messageSend)
+			})
+		})
+
+		fetch('http://127.0.0.1:8000/victim-post/',{
+			'method':"POST",
+			"headers": {
+      			"Content-Type": "application/json"
+			},
+			"body":JSON.stringify({
+				"name":name,
+				"age":age,
+				"sex":sex,
+				"height":height,
+				"last_seen_address":last_seen_address,
+				"last_seen_zip_code":last_seen_zip_code,
+				"desc":desc
+			})
+		})
+	}
+
+	getAPI() 
+}
